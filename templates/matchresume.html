@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fefefe;
+        }
+
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .card-header {
+            background-color: #ffcc80;
+            color: #333;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #ffb74d;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffa726;
+        }
+
+        .custom-file-label {
+            background-color: #fff3e0;
+        }
+
+        .alert-info {
+            background-color: #e3f2fd;
+            color: #0277bd;
+        }
+
+        .table-success {
+            background-color: #e8f5e9;
+        }
+
+        .header-image {
+            width: 100%;
+            max-height: 170px;
+            object-fit: contain;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">Job Description and Resume Matcher</h1>
+        <img src="{{ url_for('static', filename='image1.jpg.jpg') }}" alt="Resume Matcher" class="header-image">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="/matcher" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="job_description">Job Description:</label>
+                        <textarea class="form-control" id="job_description" name="job_description" rows="5" required
+                            placeholder="Paste the job description here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="resumes">Upload Resumes (Min: 5)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="resumes" name="resumes" multiple required
+                                accept=".pdf, .docx, .txt">
+                            <label class="custom-file-label" for="resumes">Choose files...</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Match Resumes</button>
+                </form>
+                {% if message %}
+                <div class="alert alert-info mt-4">
+                    <p>{{ message }}</p>
+                    <h4>All Matching Resumes:</h4>
+                    <table class="table mt-3">
+                        <thead>
+                            <tr>
+                                <th>Resume Name</th>
+                                <th>Similarity Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index in range(top_resumes|length) %}
+                            <tr>
+                                <td>{{ top_resumes[index] }}</td>
+                                <td>{{ similarity_scores[index] }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <h4>Top 3 Best Matching Resumes:</h4>
+                    <table class="table mt-3 table-success">
+                        <thead>
+                            <tr>
+                                <th>Resume Name</th>
+                                <th>Similarity Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index in range(top_3_resumes|length) %}
+                            <tr>
+                                <td>{{ top_3_resumes[index] }}</td>
+                                <td>{{ top_3_scores[index] }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+            var fileName = Array.from(this.files).map(file => file.name).join(", ");
+            this.nextElementSibling.innerText = fileName || "Choose files...";
+        });
+    </script>
+</body>
+
+</html> 
