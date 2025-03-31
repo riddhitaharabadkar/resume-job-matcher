@@ -7,7 +7,7 @@ The **Resume-Job Matcher** is a tool that compares resumes with job descriptions
 - Extracts key details from resumes
 - Analyzes job descriptions
 - Ranks resumes based on job relevance
-- Provides keyword suggestions for improvement
+
 
 ##  Installation
 1. Clone the repository:
